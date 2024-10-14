@@ -21,7 +21,7 @@ for csv_file in csv_files:
         unique_model_name = f"{model_name}_variation_{i}"
     
         # Create the SQL file for the model
-        model_file_path = os.path.join(models_folder_path, f'model_{model_name}.sql')
+        model_file_path = os.path.join(models_folder_path, f'model_{model_name}_variation_{i}.sql')
     
         # Create the SQL content for the model
         sql_content = f"""
