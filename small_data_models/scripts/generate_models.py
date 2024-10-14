@@ -16,15 +16,22 @@ os.makedirs(models_folder_path, exist_ok=True)
 for csv_file in csv_files:
     # Extract the filename without the extension
     model_name = os.path.splitext(os.path.basename(csv_file))[0]
+    for i in range(1, 51):
+        # Create a unique model name
+        unique_model_name = f"{model_name}_variation_{i}"
     
-    # Create the SQL file for the model
-    model_file_path = os.path.join(models_folder_path, f'model_{model_name}.sql')
+        # Create the SQL file for the model
+        model_file_path = os.path.join(models_folder_path, f'model_{model_name}.sql')
     
-    # Create the SQL content for the model
-    sql_content = "select * from {{ref('"+model_name+"')}}"
-    # Write the content to the model file
-    with open(model_file_path, 'w') as model_file:
-        model_file.write(sql_content.strip())
+        # Create the SQL content for the model
+        sql_content = f"""
+        {{{{ config(materialized='ephemeral') }}}}
+
+        select * from {{ ref('{model_name}') }} where variation_id = {i};
+        """
+        # Write the content to the model file
+        with open(model_file_path, 'w') as model_file:
+            model_file.write(sql_content.strip())
     
     print(f"Created model: {model_file_path}")
 
