@@ -12,28 +12,28 @@ csv_files = glob.glob(os.path.join(seeds_folder_path, '*.csv'))
 models_folder_path = os.path.join(dbt_project_path, 'models')
 os.makedirs(models_folder_path, exist_ok=True)
 
-# Loop through each CSV file and create a dbt model
-for csv_file in csv_files:
-    # Extract the filename without the extension
-    model_name = os.path.splitext(os.path.basename(csv_file))[0]
-    for i in range(1, 51):
-        # Create a unique model name
-        unique_model_name = f"{model_name}_variation_{i}"
+# # Loop through each CSV file and create a dbt model
+# for csv_file in csv_files:
+#     # Extract the filename without the extension
+#     model_name = os.path.splitext(os.path.basename(csv_file))[0]
+#     for i in range(1, 51):
+#         # Create a unique model name
+#         unique_model_name = f"{model_name}_variation_{i}"
     
-        # Create the SQL file for the model
-        model_file_path = os.path.join(models_folder_path, f'model_{model_name}_variation_{i}.sql')
+#         # Create the SQL file for the model
+#         model_file_path = os.path.join(models_folder_path, f'model_{model_name}_variation_{i}.sql')
     
-        # Create the SQL content for the model
-        sql_content = f"""
-        {{{{ config(materialized='ephemeral') }}}}
+#         # Create the SQL content for the model
+#         sql_content = f"""
+#         {{{{ config(materialized='ephemeral') }}}}
 
-        select * from {{ ref('{model_name}') }} where variation_id = {i};
-        """
-        # Write the content to the model file
-        with open(model_file_path, 'w') as model_file:
-            model_file.write(sql_content.strip())
+#         select * from {{ ref('{model_name}') }} where variation_id = {i};
+#         """
+#         # Write the content to the model file
+#         with open(model_file_path, 'w') as model_file:
+#             model_file.write(sql_content.strip())
     
-    print(f"Created ephemeral model: {model_file_path}")
+#     print(f"Created ephemeral model: {model_file_path}")
 
 
 
@@ -44,17 +44,15 @@ for csv_file in csv_files[:20]:
     
     
         # Create the SQL file for the model
-    model_file_path = os.path.join(models_folder_path, f'model_{unique_model_name}.sql')
+    model_file_path = os.path.join(models_folder_path, f'model_{model_name}.sql')
     
-        # Create the SQL content for the model with default materialization
-    sql_content = f"""
-        select * from {{ ref('{model_name}') }} where variation_id = {i};
-        """
-        
-        # Write the content to the model file
+    # Create the SQL content for the model
+    sql_content = "select * from {{ref('"+model_name+"')}}"
+    # Write the content to the model file
     with open(model_file_path, 'w') as model_file:
-            model_file.write(sql_content.strip())
+        model_file.write(sql_content.strip())
     
-    print(f"Created default materialization model: {model_file_path}")
+    print(f"Created model: {model_file_path}")
+
 
 print("All models created successfully.")
