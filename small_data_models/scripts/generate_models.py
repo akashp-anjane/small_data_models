@@ -41,22 +41,20 @@ for csv_file in csv_files:
 for csv_file in csv_files[:20]:
     # Extract the filename without the extension
     model_name = os.path.splitext(os.path.basename(csv_file))[0]
-    for i in range(1, 21):  # Generate 20 models for each of the first 20 seed files
-        # Create a unique model name
-        unique_model_name = f"{model_name}_default_variation_{i}"
+    
     
         # Create the SQL file for the model
-        model_file_path = os.path.join(models_folder_path, f'model_{unique_model_name}.sql')
+    model_file_path = os.path.join(models_folder_path, f'model_{unique_model_name}.sql')
     
         # Create the SQL content for the model with default materialization
-        sql_content = f"""
+    sql_content = f"""
         select * from {{ ref('{model_name}') }} where variation_id = {i};
         """
         
         # Write the content to the model file
-        with open(model_file_path, 'w') as model_file:
+    with open(model_file_path, 'w') as model_file:
             model_file.write(sql_content.strip())
     
-        print(f"Created default materialization model: {model_file_path}")
+    print(f"Created default materialization model: {model_file_path}")
 
 print("All models created successfully.")
