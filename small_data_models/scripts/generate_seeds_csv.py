@@ -6,7 +6,7 @@ from faker import Faker
 fake = Faker()
 
 # Configuration
-num_files = 1000
+num_files = 10
 num_rows_per_file = 5  # Adjust the number of rows per CSV as needed
 output_directory = 'seeds'
 
